@@ -49,3 +49,4 @@ Voor het tweede deel hebben we deze packages nodig:
 - json
 - redis
 - pandas
+- time
