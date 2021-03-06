@@ -25,7 +25,7 @@ def Scrape():
         for article in transaction.find_all('div', class_='sc-1g6z4xm-0 hXyplo'):
             hash = article.a.text
             for times in article.find_all('div', class_='sc-1au2w4e-0 emaUuf'):
-                xoxo = times.find('span', class_='sc-1ryi78w-0 cILyoi sc-16b9dsl-1 ZwupP u3ufsr-0 eQTRKC').text
+                hour = times.find('span', class_='sc-1ryi78w-0 cILyoi sc-16b9dsl-1 ZwupP u3ufsr-0 eQTRKC').text
                 amounts = article.find_all('div', class_='sc-1au2w4e-0 fTyXWG')
                 amountBTC = amounts[0].text
                 amountBTC = amountBTC.split(')')[1]
@@ -33,7 +33,7 @@ def Scrape():
                 amountUSD = amountUSD.split(')')[1]
 
 
-                df2 = pd.DataFrame([hash, xoxo, amountBTC, amountUSD])
+                df2 = pd.DataFrame([hash, hour, amountBTC, amountUSD])
                 df2 = df2.transpose()
 
                 df = df.append(df2)
