@@ -1,5 +1,4 @@
 import pymongo as mongo
-import json
 import redis
 import pandas as pd
 import time
