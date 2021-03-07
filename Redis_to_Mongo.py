@@ -41,5 +41,3 @@ col_highest.insert_one(data_max)
 
 #clear na minuut
 r.expire('key', 60)
-
-print(data_max)
