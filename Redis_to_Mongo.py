@@ -37,7 +37,7 @@ data_max[0] = hash
 data_max[1] = hour
 data_max[2] = amountBTC
 data_max = {'Hash': hash, 'Time': hour, 'Amount_BTC': amountBTC, 'Amount_USD': max_result}
-col_highest.insert_one(data)
+col_highest.insert_one(data_max)
 
 #clear na minuut
 r.expire('key', 60)
