@@ -46,7 +46,9 @@ Voor het eerste deel van deze opdracht hebben we deze packages nodig:
 
 Voor het tweede deel hebben we deze packages nodig:
 - pymongo
-- json
 - redis
 - pandas
 - time
+
+In het bestand script_download_redis.sh vind je hoe je redis moet downloaden op je VM. Voor dit programma hebben we twee bestanden nodig. Het eerste is Redis03.py hierin scrapen we de website zoals in de vorige oefeningen reeds uitgelegd. Er zijn maar enkele veranderingen die we moeten doen. We declareren eerst Redis zodat we onze data kunnen doorsturen. Verder converten we onze dataframe naar een string zodat er geen problemen zijn al we de data doorsturen. Hierna gaan we de data dan echt doorsturen met de set methode.
+Dan gaan we verder met de tweede stap, hier gaan we de data die we in Redis hebben gestoken bekijken en de hoogste waarde bepalen. De hoogste waarde gaan we dan doorsturen naar Mongo. Dit script kunnen we vinden onder de naam Redis_to_Mongo.py. Als eerste declareren we ook hier redis, we gaan de data daarna inlezen met de get methode van Redis. Dan converten we dan string terug naar een dataframe. Als volgende declareren we Mongo, we maken een database aan en een collectie. De volgende stap is dan de hoogste waarde gaan bepalen, dit is ook eerder al uitgelegd bij de eerste oefening. Verder bepalen we de index van het bekomen bedrag zodat we de andere data ook kunnen bepalen. Hierna gaan we de data initialiseren en aan de collectie in Mongo toevoegen. De laatste stap in dit script is het leegmaken van Redis na 60 seconden met de methode expire.
