@@ -54,6 +54,5 @@ def Scrape():
         file_result = json.load(result_file)
         x = col_highest.insert_one(file_result)
 
-
-
+Scrape()
 
