@@ -40,7 +40,7 @@ def Scrape():
     #import in redis
     r.set('key', df_string)
 
-
+Scrape()
 
 
 
