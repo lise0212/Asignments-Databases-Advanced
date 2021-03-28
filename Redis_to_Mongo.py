@@ -2,42 +2,56 @@ import pymongo as mongo
 import redis
 import pandas as pd
 import time
+import zlib
+import pickle
 
 r = redis.Redis()
-# get data from redis
-df_string = r.get('key')
 
-#convert string to df
-df = pd.read_csv(df_string)
-
-client = mongo.MongoClient("mongodb://127.0.0.1:27017/")
+# call mongo
+client = mongo.MongoClient("mongodb://127.0.0.1:8081")
 
 # make db for bitcoin
 bitcoin_db = client["Bitcoin"]
- 
+    
 # make collection
-col_highest = bitcoin_db["amounts"]
+col_highest = bitcoin_db["data"]
 
-#get highest value
-for i in df[3]:
-    df[3] = df[3].replace("$","").replace(",","")
-df[3] = [item.replace("$","").replace(",","") for item in df[3]]
-df[3] = df[3].astype(float)
+def GetValue():
+    # get data from redis
+    df = pickle.loads(zlib.decompress(r.get("key"))) 
 
-max_result = df[3].max()
+    #convert string to df
+    #df = pd.read_csv(str(df_string))
+    #df = pd.read_csv('dataframe.csv')
 
-#find index of max_result
-index_max = df.loc[df['AmountUSD'] == max_result].index[0]
+    # name columns
+    df.columns=['hash','hour','amountBTC', 'amountUSD']
 
-#whole row of max_result
-data_max = df.loc[index_max]
+    #get highest value
+    for i in df['amountUSD']:
+        df['amountUSD'] = df['amountUSD'].replace("$","").replace(",","")
+    df['amountUSD'] = [item.replace("$","").replace(",","") for item in df['amountUSD']]
+    df['amountUSD'] = df['amountUSD'].astype(float)
 
-# data in collection
-data_max[0] = hash
-data_max[1] = hour
-data_max[2] = amountBTC
-data_max = {'Hash': hash, 'Time': hour, 'Amount_BTC': amountBTC, 'Amount_USD': max_result}
-col_highest.insert_one(data_max)
+    # sorteer df van hoog naar laag
+    df = df.sort_values(by=['amountUSD'], axis=0, ascending=False, inplace=False)
 
-#clear na minuut
-r.expire('key', 60)
+    # neem eerste rij
+    max_result = df.head(1)
+
+    # slaag gegevens op
+    hash = max_result._get_value(0, 'hash')
+    hour = max_result._get_value(0, 'hour')
+    amountBTC = max_result._get_value(0, 'amountBTC')
+    amountUSD = max_result._get_value(0, 'amountUSD')
+    data_max = {'Hash': hash, 'Time': hour, 'Amount_BTC': amountBTC, 'Amount_USD': amountUSD}
+
+    # data in collection
+    col_highest.insert_one(data_max)
+
+GetValue()
+
+while True:
+    GetValue()
+    time.sleep(60)
+
