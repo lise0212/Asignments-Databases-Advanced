@@ -1,0 +1,13 @@
+flask 
+redis
+bs4
+BeautifulSoup
+requests
+pandas
+dataframe
+time
+pymongo
+json
+redis
+zlib
+pickle
