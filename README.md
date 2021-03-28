@@ -58,3 +58,31 @@ Dan gaan we verder met de tweede stap, hier gaan we de data die we in Redis hebb
 # Docker04
 Voor deze opdracht moet je Docker installeren.
 Als tweede gaan we Redis en Mongo in een Docker container opslagen. Dit doen we door het scriptje script_pull_redis_mongo.sh uit te voeren. Het commando voor dit te doen is heel simpel, namelijk: docker pull <programma>.
+  
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+# Final 
+Als eerste installeren we alles wat we nodig hebben.
+Om te beginnen moet je docker desktop downloaden en MongoDB Compass. Verder dienen ook Python3 en pip geïnstalleerd te zijn. 
+
+Installeer alle packages die worden aangehaald in de requirements.txt file. 
+
+Maak een image aan voor Redis en MongoDB. Voer volgende commando's uit:
+1. docker pull redis
+2. docker pull mongo
+
+Maak van de image een container
+redis:
+  docker run -p 6379:6379 --name redis-container redis
+MongoDB - Open hiervoor een tweede command prompt
+  docker run -8081:27017 --name mongo-container mongo
+  
+Refresh Docker Desktop om de aangemaakte containers te zien
+
+Open MongoDB en klik 'fill in connection field individually' 
+Verander de port naar 8081 en klik connect
+
+Open een nieuwe command prompt en voer als eerste 'python Redis03.py' uit.
+Voer hierna, in nog een nieuwe command prompt, 'python Redis_to_Mongo.py' uit.
+
+In de Redis03.py file wordt de website gescraped en doorgestuurd naar Redis, dit wordt na 60 seconden opnieuw gedaan zolang het programma aan het runnen is.
+In de Redis_to_Mongo.py file wordt de data uit Redis gehaald, gefilterd en doorgestuur naar MongoDB. Er wordt een nieuwe database en een nieuwe collectie aangemaakt in MongoDB, door middel van een filter wordt de transactie met het hoogste bedrag doorgestuurd en getoond in MongoDB. Ook dit wordt elke minuut herhaald zolang het programma runt. 
