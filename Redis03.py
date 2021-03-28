@@ -4,6 +4,8 @@ import pandas as pd
 from pandas import DataFrame
 import time
 import redis
+import zlib
+import pickle
 
 r = redis.Redis()
 
@@ -33,14 +35,12 @@ def Scrape():
                 df2 = df2.transpose()
 
                 df = df.append(df2)
-
-    #convert df naar string
-    df_string = df.to_csv()
-
+    
     #import in redis
-    r.set('key', df_string)
+    r.set("key", zlib.compress(pickle.dumps(df)))
 
 Scrape()
 
-
-
+while True:
+    Scrape()
+    time.sleep(60)
